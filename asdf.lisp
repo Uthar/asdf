@@ -2774,6 +2774,7 @@ actually-existing directory."
 
 ;;; Parsing filenames
 (with-upgradability ()
+  #-gcl
   (declaim (ftype function ensure-pathname)) ; forward reference
 
   (defun split-unix-namestring-directory-components
@@ -3752,6 +3753,7 @@ NILs."
             #+clisp custom:*lib-directory*
             #+clozure #p"ccl:"
             #+cmucl (ignore-errors (pathname-parent-directory-pathname (truename #p"modules:")))
+            ;; TODO
             #+gcl system::*system-directory*
             #+lispworks lispworks:*lispworks-directory*
             #+sbcl (if-let (it (find-symbol* :sbcl-homedir-pathname :sb-int nil))
@@ -12357,7 +12359,7 @@ which is probably not what you want; you probably need to tweak your output tran
 (asdf:defsystem :precompiled-asdf-utils :class asdf::precompiled-system :fasl (asdf:apply-output-translations (asdf:system-relative-pathname :asdf-utils "asdf-utils.system.fasl")))
 (asdf:load-system :precompiled-asdf-utils)
 |#
-
+;; TODO
 #+(or clasp ecl mkcl)
 (with-upgradability ()
   (defun system-module-pathname (module)
@@ -12855,6 +12857,7 @@ and the order is by decreasing length of namestring of the source pathname.")
 
   ;; Compulsory implementation-dependent wrapping for the translations:
   ;; handle implementation-provided systems.
+  ;; TODO
   (defun wrapping-output-translations ()
     `(:output-translations
     ;; Some implementations have precompiled ASDF systems,
@@ -13241,7 +13244,7 @@ after having found a .asd file? True by default.")
 
   (defparameter *source-registry-file* (parse-unix-namestring "common-lisp/source-registry.conf"))
   (defparameter *source-registry-directory* (parse-unix-namestring "common-lisp/source-registry.conf.d/"))
-
+;; TODO NIL is not of type SYSTEM::PATHNAME-DESIGNATOR
   (defun wrapping-source-registry ()
     `(:source-registry
       #+(or clasp ecl sbcl) (:tree ,(resolve-symlinks* (lisp-implementation-directory)))
@@ -13543,6 +13546,7 @@ processed in order by OPERATE."))
     (plan-actions (apply 'make-plan plan-class o c keys)))
 
 
+  ;; TODO
   ;; ASDF-Binary-Locations compatibility
   ;; This remains supported for legacy user, but not recommended for new users.
   ;; We suspect there are no more legacy users in 2016.
