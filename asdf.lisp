@@ -13636,6 +13636,7 @@ Please use UIOP:RUN-PROGRAM instead."
   (defmethod component-property ((c component) property)
     (cdr (assoc property (slot-value c 'properties) :test #'equal)))
 
+  #-gcl
   (defmethod (setf component-property) (new-value (c component) property)
     (let ((a (assoc property (slot-value c 'properties) :test #'equal)))
       (if a
